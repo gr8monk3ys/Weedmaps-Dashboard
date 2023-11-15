@@ -1,5 +1,6 @@
 streamlit
 openai
-langchain
 pandas
 plotly
+transformers
+torch
