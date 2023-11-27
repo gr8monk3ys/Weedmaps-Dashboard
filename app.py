@@ -2,10 +2,10 @@ import os
 import sys
 import pandas as pd
 import streamlit as st
-from wordcloud import WordCloud
+# from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 import plotly.express as px
-from generate_llm import generate_llm
+# from generate_llm import generate_llm
 sys.path.append('./plots/')
 from time_series import create_time_series_plot
 from sentiment_distribution import create_sentiment_distribution_plot
@@ -34,7 +34,7 @@ if __name__ == '__main__':
             tweet_count_plot = create_tweet_count_bar_chart(username_tweet_counts, 'Username', 'Tweet Count', 'Tweet Counts by Username')
             st.plotly_chart(tweet_count_plot)
 
-            generate_llm()
+            # generate_llm()
 
 
         if choice == "Time Series": 
@@ -45,7 +45,7 @@ if __name__ == '__main__':
             time_series_plot = create_time_series_plot(tweet_counts, 'Post Date', 'Tweet Count', 'Tweet Frequency Over Time')
             st.plotly_chart(time_series_plot)
 
-            generate_llm()
+            # generate_llm()
 
         if choice == "Geographical":
             # Geographical section remains as is
@@ -53,4 +53,4 @@ if __name__ == '__main__':
             geo_counts.columns = ['Geo location', 'Count']
             geo_plot = px.scatter_geo(geo_counts, locations='Geo location', locationmode='USA-states', hover_name='Geo location', size='Count', title='Distribution of Tweets by Geo Location in USA', template='plotly_dark', scope='usa')
             st.plotly_chart(geo_plot)
-            generate_llm()
+            # generate_llm()
