@@ -1,4 +1,4 @@
-"Year","Month","County","State","Key word","Cleaned_Content","VADER_Sentiment_Score","BERT_Sentiment","Predictions","GPT_Sentiment"
+"Year","Month","County","State","Key word","Cleaned_Content","VADER_Sentiment","BERT_Sentiment","Predictions","GPT_Sentiment"
 "2020","1","Alameda","California","joint","note i previously had tilda swinton on this list but was reminded she was already in a wes anderson joint because obviously","0","3 stars","1","-1"
 "2020","1","Alameda","California","joint","add to the list of generals who have disgraced the uniform by aiding and abetting trump army general mark milley chairman of the joint chiefs of staff","-0.4588","5 stars","1","1"
 "2020","1","Alameda","California","blunt","im trying to slide out hear a dope dj smoke this blunt then go back home whats the word","0","1 star","2","0"
