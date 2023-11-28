@@ -1,56 +1,67 @@
-import os 
+import os
 import sys
+import json
 import pandas as pd
 import streamlit as st
-# from wordcloud import WordCloud
-import matplotlib.pyplot as plt
-import plotly.express as px
-# from generate_llm import generate_llm
+
 sys.path.append('./plots/')
-from time_series import create_time_series_plot
+from time_series import create_time_series
 from sentiment_distribution import create_sentiment_distribution_plot
 from tweet_count_bar import create_tweet_count_bar_chart
+from choropleth import create_choropleth
+from bubble_chart import create_bubble_chart
+
+@st.cache_data()
+def load_geojson(path):
+    with open(path) as f:
+        return json.load(f)
 
 def generate_sidebar():
-    with st.sidebar: 
-        st.image("https://www.onepointltd.com/wp-content/uploads/2020/03/inno2.png")
+    with st.sidebar:
+        st.image("weedmaps_logo.png")  # Replace with your image URL
         st.title("554 Project")
         st.info("This project application helps you see the different types of trends when it comes to weed based on twitter data.")
 
 if __name__ == '__main__':
     openai_api_key = os.getenv('OPENAI_API_KEY', '')
     choice = st.sidebar.radio("Navigation", ["Sentiment","Time Series","Geographical"])
+    generate_sidebar()
 
-    if os.path.exists('./tweets-sample.csv'): 
-        df = pd.read_csv('./tweets-sample.csv', index_col=None)
-        generate_sidebar()
+    # Load the new data files
+    dispensaries = pd.read_csv('./data/Dispensaries.csv', index_col=None)
+    density = pd.read_csv('./data/Dispensary_Density.csv', index_col=None)
+    tweet_sentiment = pd.read_csv('./data/Tweet_Sentiment.csv', index_col=None)
+    
+    ca_geojson_path = './data/California_County_Boundaries.geojson'
+    ca_counties = load_geojson(ca_geojson_path)
 
-        # Example: If you want to plot the number of tweets per 'Username'
-        if choice == "Sentiment":
-            st.title("Tweet Counts by Username")
-            username_tweet_counts = df['Username'].value_counts().reset_index()
-            username_tweet_counts.columns = ['Username', 'Tweet Count']
+    if choice == "Sentiment":
+        st.write("Sentiment Analysis")
+        BERT_fig = create_sentiment_distribution_plot(tweet_sentiment, 'Month', 'Predictions')
+        st.plotly_chart(BERT_fig)
+        VADER_fig = create_sentiment_distribution_plot(tweet_sentiment, 'Month', 'VADER_Sentiment')
+        st.plotly_chart(VADER_fig)
+        GPT_fig = create_sentiment_distribution_plot(tweet_sentiment, 'Month', 'GPT_Sentiment')
+        st.plotly_chart(GPT_fig)
 
-            tweet_count_plot = create_tweet_count_bar_chart(username_tweet_counts, 'Username', 'Tweet Count', 'Tweet Counts by Username')
-            st.plotly_chart(tweet_count_plot)
+    elif choice == "Time Series":
+        st.write("Time Series Analysis")
+        BERT_fig = create_time_series(tweet_sentiment, 'Year', 'Month', 'Predictions', 'BERT Sentiment over time')
+        st.plotly_chart(BERT_fig)
+        VADER_fig = create_time_series(tweet_sentiment, 'Year', 'Month', 'VADER_Sentiment', 'VADER Sentiment over time')
+        st.plotly_chart(VADER_fig)
+        GPT_fig = create_time_series(tweet_sentiment, 'Year', 'Month', 'GPT_Sentiment', 'GPT Sentiment over time')
+        st.plotly_chart(GPT_fig)
 
-            # generate_llm()
+        comparison_fig = compare_medical_recreational(dispensaries_data)
+        st.plotly_chart(comparison_fig)
 
+    elif choice == "Geographical":
+        st.write("Geographical Analysis")
+        density['County'] = density['County'].str.replace(' county', '', case=False, regex=False)
+        choropleth = create_choropleth(density, ca_counties)
+        st.plotly_chart(choropleth)
 
-        if choice == "Time Series": 
-            st.title("Time Series Analysis")
-            df['Post Date'] = pd.to_datetime(df['Post Date'])
-            tweet_counts = df.groupby(df['Post Date'].dt.date).size().reset_index(name='Tweet Count')
-
-            time_series_plot = create_time_series_plot(tweet_counts, 'Post Date', 'Tweet Count', 'Tweet Frequency Over Time')
-            st.plotly_chart(time_series_plot)
-
-            # generate_llm()
-
-        if choice == "Geographical":
-            # Geographical section remains as is
-            geo_counts = df['Geo location'].value_counts().reset_index()
-            geo_counts.columns = ['Geo location', 'Count']
-            geo_plot = px.scatter_geo(geo_counts, locations='Geo location', locationmode='USA-states', hover_name='Geo location', size='Count', title='Distribution of Tweets by Geo Location in USA', template='plotly_dark', scope='usa')
-            st.plotly_chart(geo_plot)
-            # generate_llm()
+        selected_year = st.slider("Select Year", min_value=density['Year'].min(), max_value=density['Year'].max(), value=density['Year'].min())
+        bubble_chart = create_bubble_chart(density, ca_counties, selected_year)
+        st.plotly_chart(bubble_chart)
