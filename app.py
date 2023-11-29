@@ -13,10 +13,23 @@ from choropleth import create_choropleth
 from bubble_chart import create_bubble_chart
 from comparison_plot import compare_medical_recreational
 
+st.set_page_config(layout='wide', initial_sidebar_state='expanded')
+
 @st.cache_data()
 def load_geojson(path):
     with open(path) as f:
         return json.load(f)
+
+# Load the new data files
+dispensaries = pd.read_csv('./data/Dispensaries.csv', index_col=None)
+density = pd.read_csv('./data/Dispensary_Density.csv', index_col=None)
+tweet_sentiment = pd.read_csv('./data/Tweet_Sentiment.csv', index_col=None)
+ca_geojson_path = './data/California_County_Boundaries.geojson'
+ca_counties = load_geojson(ca_geojson_path)
+
+# Sidebar parameters
+selected_year = st.sidebar.slider("Select Year", min_value=density['Year'].min(), max_value=density['Year'].max(), value=density['Year'].min())
+
 
 def generate_sidebar():
     with st.sidebar:
@@ -31,23 +44,18 @@ def generate_sidebar():
         st.sidebar.subheader('Line chart parameters')
         plot_data = st.sidebar.multiselect('Select data', ['temp_min', 'temp_max'], ['temp_min', 'temp_max'])
         plot_height = st.sidebar.slider('Specify plot height', 200, 500, 250)
-        st.image("weedmaps_logo.png")  # Replace with your image URL
 
-st.set_page_config(layout='wide', initial_sidebar_state='expanded')
+        st.sidebar.subheader('Bubble chart parameters')
+
+
+        st.image("weedmaps_logo.png")  # Replace with your image URL
 
 with open('style.css') as f:
     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
 openai_api_key = os.getenv('OPENAI_API_KEY', '')
+
 generate_sidebar()
-
-# Load the new data files
-dispensaries = pd.read_csv('./data/Dispensaries.csv', index_col=None)
-density = pd.read_csv('./data/Dispensary_Density.csv', index_col=None)
-tweet_sentiment = pd.read_csv('./data/Tweet_Sentiment.csv', index_col=None)
-
-ca_geojson_path = './data/California_County_Boundaries.geojson'
-ca_counties = load_geojson(ca_geojson_path)
 
 st.write("Geographical Analysis")
 
@@ -59,7 +67,6 @@ with col1:
     st.plotly_chart(choropleth)
 
 with col2:
-
     def map_stars_to_numeric(star_rating):
         if pd.isna(star_rating):
             return None
@@ -71,38 +78,42 @@ with col2:
     # Group by 'County' and calculate the mean of numeric BERT Sentiment
     grouped_bert_per_county = tweet_sentiment.groupby('County')['Numeric_BERT_Sentiment'].mean().reset_index()
 
-
     sentiment_choropleth = px.choropleth(
-        tweet_sentiment,
+        grouped_bert_per_county,
         geojson=ca_counties,
-        locations='County',  # Column in density_data that denotes the county
+        locations=grouped_bert_per_county['County'],  # Column in density_data that denotes the county
         featureidkey='properties.COUNTY_NAME',  # Path to county in geoJSON
-        color=grouped_bert_per_county,  # Column denoting the value/color in the plot
+        color=grouped_bert_per_county['Numeric_BERT_Sentiment'],  # Column denoting the value/color in the plot
         color_continuous_scale='Viridis',
         scope="usa"
     )
     sentiment_choropleth.update_geos(fitbounds="locations", visible=False)
     sentiment_choropleth.update_layout(title_text='Sentiment Per Capita in California Counties')
+    # sentiment_choropleth.update_traces(colorscale=green_color_scale)
     st.plotly_chart(sentiment_choropleth)
 
 st.write("Sentiment Analysis")
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    BERT_fig = create_sentiment_distribution_plot(tweet_sentiment, 'Month', 'Predictions')
-    st.plotly_chart(BERT_fig)
+    sentiment_distribution = tweet_sentiment['BERT_Sentiment'].value_counts().reset_index()
+    sentiment_distribution.columns = ['Sentiment', 'Count']
+    fig_sentiment_distribution = px.bar(sentiment_distribution, x='Sentiment', y='Count', title='Sentiment Analysis Distribution')
+    st.plotly_chart(fig_sentiment_distribution)
 
 with col2:
-    VADER_fig = create_sentiment_distribution_plot(tweet_sentiment, 'Month', 'VADER_Sentiment')
-    st.plotly_chart(VADER_fig)
+    monthly_tweet_counts = tweet_sentiment.groupby(['Year', 'Month']).size().reset_index(name='Tweet Count')
+    fig_monthly_tweet_counts = px.bar(monthly_tweet_counts, x='Month', y='Tweet Count', color='Year', barmode='group', title='Monthly Tweet Counts')
+    st.plotly_chart(fig_monthly_tweet_counts)
 with col3:
-    GPT_fig = create_sentiment_distribution_plot(tweet_sentiment, 'Month', 'GPT_Sentiment')
-    st.plotly_chart(GPT_fig)
+    yearly_license_issuance = dispensaries.groupby('Year').size().reset_index(name='License Count')
+    fig_yearly_license_issuance = px.bar(yearly_license_issuance, x='Year', y='License Count', title='Yearly Trends in License Issuance')
+    st.plotly_chart(fig_yearly_license_issuance)
 
 st.write("Time Series Analysis")
 with col1:
-    BERT_fig = create_time_series(tweet_sentiment, 'Year', 'Month', 'Predictions', 'BERT Sentiment over time')
-    st.plotly_chart(BERT_fig)
+    fig_sentiment_distribution = create_time_series(tweet_sentiment, 'Year', 'Month', 'Predictions', 'BERT Sentiment over time')
+    st.plotly_chart(fig_sentiment_distribution)
 
 with col2:
     VADER_fig = create_time_series(tweet_sentiment, 'Year', 'Month', 'VADER_Sentiment', 'VADER Sentiment over time')
@@ -111,16 +122,32 @@ with col3:
     GPT_fig = create_time_series(tweet_sentiment, 'Year', 'Month', 'GPT_Sentiment', 'GPT Sentiment over time')
     st.plotly_chart(GPT_fig)
 
-county_dispensary_counts = density.groupby('County')['Dispensary_Count'].sum().reset_index()
+with col1:
+    county_dispensary_counts = density.groupby('County')['Dispensary_Count'].sum().reset_index()
+    donut = px.pie(county_dispensary_counts, names='County', values='Dispensary_Count', hole=0.4)
+    donut.update_traces(textinfo='percent+label')
+    donut.update_layout(title_text='Dispensary Distribution by County')
+    st.plotly_chart(donut)
+with col2:
+    license_type_distribution = dispensaries['License Type'].value_counts().reset_index()
+    license_type_distribution.columns = ['License Type', 'Count']
+    fig_license_type = px.pie(license_type_distribution, names='License Type', values='Count', hole=0.4)
+    fig_license_type.update_traces(textinfo='percent+label')
+    fig_license_type.update_layout(title_text='License Type Distribution in Dispensaries')
+    st.plotly_chart(fig_license_type)
 
-# Create a donut chart
-fig = px.pie(county_dispensary_counts, names='County', values='Dispensary_Count', hole=0.4)
-fig.update_traces(textinfo='percent+label')
-fig.update_layout(title_text='Dispensary Distribution by County')
+# Group data by Year and Month, and calculate the average VADER Sentiment Score
+heatmap_data = tweet_sentiment.groupby(['Year', 'Month'])['VADER_Sentiment'].mean().reset_index()
 
-comparison_fig = compare_medical_recreational(dispensaries)
-st.plotly_chart(comparison_fig)
+# Create a pivot table for the heatmap
+heatmap_pivot = heatmap_data.pivot(index="Month", columns="Year", values="VADER_Sentiment")
 
-selected_year = st.slider("Select Year", min_value=density['Year'].min(), max_value=density['Year'].max(), value=density['Year'].min())
-bubble_chart = create_bubble_chart(density, ca_counties, selected_year)
-st.plotly_chart(bubble_chart)
+# Create a heatmap using Plotly
+fig_heatmap = px.imshow(heatmap_pivot, labels=dict(x="Year", y="Month", color="Avg VADER Sentiment Score"),
+                        x=heatmap_pivot.columns, y=heatmap_pivot.index, aspect="auto", title="Heatmap of VADER Sentiment Scores Over Time")
+st.plotly_chart(fig_heatmap)
+# comparison_fig = compare_medical_recreational(dispensaries)
+# st.plotly_chart(comparison_fig)
+
+# bubble_chart = create_bubble_chart(density, ca_counties, selected_year)
+# st.plotly_chart(bubble_chart)
