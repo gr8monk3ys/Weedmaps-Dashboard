@@ -9,7 +9,8 @@ from generate_sidebar import generate_sidebar
 
 generate_sidebar()
 
-# Creating two columns in Streamlit for side-by-side layout
+green_shades = ["lightgreen", "mediumseagreen", "darkgreen", "limegreen", "forestgreen"]
+
 col1, col2 = st.columns([3,3])
 
 # Load the data files
@@ -29,20 +30,15 @@ with col1:
 
 # Creating a scatter plot in the right column
 with col2:
-    # Calculating average sentiment per county and year
     average_sentiment_per_county = tweet_sentiment.groupby(['County', 'Year'])['VADER_Sentiment'].mean().reset_index()
-    
-    # Merging the average sentiment data with the density data
     merged_data = pd.merge(density, average_sentiment_per_county, on=['County', 'Year'])
-    
-    # Creating a scatter plot using Plotly Express
     scatter = px.scatter(merged_data, 
-                         x='Dispensary_Count', 
-                         y='VADER_Sentiment', 
-                         color='County', 
-                         symbol='Year', 
-                         size='Dispensary_Count',
-                         title='Dispensary Count vs. Average Sentiment per County (Plotly)',
-                         labels={'Dispensary_Count': 'Dispensary Count', 'VADER_Sentiment': 'Average Sentiment (VADER)'})
-
-    st.plotly_chart(scatter)
+                    x='Dispensary_Count', 
+                    y='VADER_Sentiment', 
+                    color='County', 
+                    symbol='Year', 
+                    size='Dispensary_Count',
+                    title='Dispensary Count vs. Average Sentiment per County',
+                    color_discrete_sequence=green_shades,
+                    labels={'Dispensary_Count': 'Dispensary Count', 'VADER_Sentiment': 'Average Sentiment (VADER)'})
+    st.plotly_chart(scatter)        
