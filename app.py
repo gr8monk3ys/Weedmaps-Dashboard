@@ -15,6 +15,12 @@ from comparison_plot import compare_medical_recreational
 
 st.set_page_config(layout='wide', initial_sidebar_state='expanded')
 
+green_scale = [
+    [0, "lightgreen"],  # Light green for low values
+    [0.5, "mediumseagreen"],  # Medium green for middle values
+    [1, "darkgreen"]  # Dark green for high values
+]
+
 @st.cache_data()
 def load_geojson(path):
     with open(path) as f:
@@ -29,7 +35,6 @@ ca_counties = load_geojson(ca_geojson_path)
 
 # Sidebar parameters
 selected_year = st.sidebar.slider("Select Year", min_value=density['Year'].min(), max_value=density['Year'].max(), value=density['Year'].min())
-
 
 def generate_sidebar():
     with st.sidebar:
@@ -63,10 +68,21 @@ col1, col2 = st.columns(2)
 
 with col1:
     density['County'] = density['County'].str.replace(' county', '', case=False, regex=False)
-    choropleth = create_choropleth(density, ca_counties)
-    st.plotly_chart(choropleth)
+    choropleth = px.choropleth(
+        density,
+        geojson=ca_counties,
+        locations='County',  # Column in density_data that denotes the county
+        featureidkey='properties.COUNTY_NAME',  # Path to county in geoJSON
+        color='Dispensary_PerCapita',  # Column denoting the value/color in the plot
+        color_continuous_scale='Viridis',
+        scope="usa"
+    )
+    choropleth.update_geos(fitbounds="locations", visible=False)
+    choropleth.update_layout(title_text='Dispensary Per Capita in California Counties')
+    st.plotly_chart(choropleth, use_container_width=True, config={'staticPlot': True})
 
 with col2:
+    @st.cache_data()
     def map_stars_to_numeric(star_rating):
         if pd.isna(star_rating):
             return None
@@ -89,8 +105,7 @@ with col2:
     )
     sentiment_choropleth.update_geos(fitbounds="locations", visible=False)
     sentiment_choropleth.update_layout(title_text='Sentiment Per Capita in California Counties')
-    # sentiment_choropleth.update_traces(colorscale=green_color_scale)
-    st.plotly_chart(sentiment_choropleth)
+    st.plotly_chart(sentiment_choropleth, use_container_width=True, config={'staticPlot': True})
 
 st.write("Sentiment Analysis")
 col1, col2, col3 = st.columns(3)
@@ -146,6 +161,24 @@ heatmap_pivot = heatmap_data.pivot(index="Month", columns="Year", values="VADER_
 fig_heatmap = px.imshow(heatmap_pivot, labels=dict(x="Year", y="Month", color="Avg VADER Sentiment Score"),
                         x=heatmap_pivot.columns, y=heatmap_pivot.index, aspect="auto", title="Heatmap of VADER Sentiment Scores Over Time")
 st.plotly_chart(fig_heatmap)
+
+with col1:
+    st.markdown("This is an explanation on the scatter plot that is displayed to the right")
+
+with col2:
+    average_sentiment_per_county = tweet_sentiment.groupby(['County', 'Year'])['VADER_Sentiment'].mean().reset_index()
+    merged_data = pd.merge(density, average_sentiment_per_county, on=['County', 'Year'])
+    scatter = px.scatter(merged_data, 
+                    x='Dispensary_Count', 
+                    y='VADER_Sentiment', 
+                    color='County', 
+                    symbol='Year', 
+                    size='Dispensary_Count',
+                    title='Dispensary Count vs. Average Sentiment per County (Plotly)',
+                    labels={'Dispensary_Count': 'Dispensary Count', 'VADER_Sentiment': 'Average Sentiment (VADER)'})
+
+    st.plotly_chart(scatter)
+
 # comparison_fig = compare_medical_recreational(dispensaries)
 # st.plotly_chart(comparison_fig)
 
