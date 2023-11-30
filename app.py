@@ -158,7 +158,7 @@ with col2:
 #     st.plotly_chart(fig_heatmap)
 
 with col1:
-    st.markdown("This is an explanation on the scatter plot that is displayed to the right")
+    st.markdown("In this scatter plot, each point represents a county, with its position indicating the number of dispensaries (x-axis) and the average sentiment score (y-axis). Different colors and shapes represent different counties and years, respectively. This plot helps in examining the relationship between dispensary density and public sentiment at the county level.")
 
 with col2:
     average_sentiment_per_county = tweet_sentiment.groupby(['County', 'Year'])['VADER_Sentiment'].mean().reset_index()
