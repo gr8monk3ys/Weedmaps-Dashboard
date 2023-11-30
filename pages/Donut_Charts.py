@@ -19,8 +19,8 @@ ca_geojson_path = './data/California_County_Boundaries.geojson'
 ca_counties = load_geojson(ca_geojson_path)
 
 
-#col1, col2 = st.columns([3,3])
-col1, space, col2 = st.columns([0.5,6,0.5])  # Adding an empty column for spacing
+col1, col2 = st.columns([3,3])
+# col1, space, col2 = st.columns([1,1])  # Adding an empty column for spacing
 
 with col1:
     county_dispensary_counts = density.groupby('County')['Dispensary_Count'].sum().reset_index()
