@@ -16,7 +16,7 @@ def generate_sidebar():
 
         st.sidebar.subheader('Line chart parameters')
         plot_data = st.sidebar.multiselect('Select data', ['2020', '2021', '2022'], ['2020', '2021', '2022'])
-        plot_height = st.sidebar.slider('Specify plot height', 300, 500, 300)
+        # plot_height = st.sidebar.slider('Specify plot height', 300, 500, 300)
 
         # st.sidebar.subheader('Bubble chart parameters')
 
