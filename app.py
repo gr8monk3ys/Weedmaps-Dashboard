@@ -58,6 +58,7 @@ openai_api_key = os.getenv('OPENAI_API_KEY', '')
 generate_sidebar()
 
 st.markdown('<p class="big-font">Geographical Analysis</p>', unsafe_allow_html=True)
+st.markdown("Offer insights into the relationship between the presence of cannabis dispensaries and public sentiment towards cannabis in California counties. Reveal patterns such as whether areas with more dispensaries correlate with more positive public sentiment, thus providing valuable context for understanding how the accessibility of cannabis impacts community attitudes. ")
 col1, col2 = st.columns(2)
 with col1:
     density['County'] = density['County'].str.replace(' county', '', case=False, regex=False)
@@ -158,7 +159,7 @@ with col2:
 #     st.plotly_chart(fig_heatmap)
 
 with col1:
-    st.markdown("In this scatter plot, each point represents a county, with its position indicating the number of dispensaries (x-axis) and the average sentiment score (y-axis). Different colors and shapes represent different counties and years, respectively. This plot helps in examining the relationship between dispensary density and public sentiment at the county level.")
+    st.markdown("Analyze the correlation between dispensary count and average sentiment in California counties. Each point in this scatter plot correlates the number of dispensaries to sentiment scores, differentiated by counties and years, illustrating the potential impact of dispensary density on public sentiment.")
 
 with col2:
     average_sentiment_per_county = tweet_sentiment.groupby(['County', 'Year'])['VADER_Sentiment'].mean().reset_index()
