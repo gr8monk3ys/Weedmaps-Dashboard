@@ -33,3 +33,9 @@ with col3:
     yearly_license_issuance = dispensaries.groupby('Year').size().reset_index(name='License Count')
     fig_yearly_license_issuance = px.bar(yearly_license_issuance, x='Year', y='License Count', title='Yearly Trends in License Issuance', color_discrete_sequence=green_shades)
     st.plotly_chart(fig_yearly_license_issuance)
+
+with open('./markdown/sentiment.md', 'r') as file:
+    md_contents = file.read()   
+
+st.markdown('Sentiment Analysis', unsafe_allow_html=True)
+st.markdown(md_contents, unsafe_allow_html=False)

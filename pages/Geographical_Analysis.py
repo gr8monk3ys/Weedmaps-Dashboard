@@ -18,9 +18,6 @@ tweet_sentiment = pd.read_csv('./data/Tweet_Sentiment.csv', index_col=None)
 ca_geojson_path = './data/California_County_Boundaries.geojson'
 ca_counties = load_geojson(ca_geojson_path)
 
-# st.markdown('<p class="big-font">Geographical Analysis</p>', unsafe_allow_html=False)
-# st.markdown("Offer insights into the relationship between the presence of cannabis dispensaries and public sentiment towards cannabis in California counties. Reveal patterns such as whether areas with more dispensaries correlate with more positive public sentiment, thus providing valuable context for understanding how the accessibility of cannabis impacts community attitudes. ")
-
 with col1:
     density['County'] = density['County'].str.replace(' county', '', case=False, regex=False)
     choropleth = px.choropleth(
@@ -61,3 +58,9 @@ with col2:
     sentiment_choropleth.update_geos(fitbounds="locations", visible=False)
     sentiment_choropleth.update_layout(title_text='Sentiment Per Capita in California Counties')
     st.plotly_chart(sentiment_choropleth, use_container_width=False, config={'staticPlot': False})
+
+with open('./markdown/choropleth.md', 'r') as file:
+    md_contents = file.read()
+
+st.markdown('Geographical Analysis', unsafe_allow_html=True)
+st.markdown(md_contents, unsafe_allow_html=False)

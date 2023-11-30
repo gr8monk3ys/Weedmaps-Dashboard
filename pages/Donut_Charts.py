@@ -37,5 +37,5 @@ with col2:
 with open('./markdown/donut.md', 'r') as file:
     md_contents = file.read()   
 
-# st.markdown('<p class="big-font">Donut Charts</p>', unsafe_allow_html=True)
-# st.markdown("")
+st.markdown('Donut Charts', unsafe_allow_html=True)
+st.markdown(md_contents, unsafe_allow_html=False)

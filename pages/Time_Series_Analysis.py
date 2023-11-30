@@ -30,3 +30,9 @@ with col2:
 with col3:
     GPT_fig = create_time_series(tweet_sentiment, 'Year', 'Month', 'GPT_Sentiment', 'GPT Sentiment over time')
     st.plotly_chart(GPT_fig)
+
+with open('./markdown/time_series.md', 'r') as file:
+    md_contents = file.read()
+
+st.markdown('Geographical Analysis', unsafe_allow_html=True)
+st.markdown(md_contents, unsafe_allow_html=False)
