@@ -9,7 +9,7 @@ from generate_sidebar import generate_sidebar
 
 generate_sidebar()
 
-col1, col2, col3 = st.columns(3)
+col1, col2, col3 = st.columns([3,3,3])
 
 green_shades = ["lightgreen", "mediumseagreen", "darkgreen", "limegreen", "forestgreen"]
 

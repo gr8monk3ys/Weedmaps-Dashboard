@@ -9,7 +9,7 @@ from generate_sidebar import generate_sidebar
 
 generate_sidebar()
 
-col1, col2 = st.columns(2)
+col1, col2 = st.columns([3,3])
 
 # Load the new data files
 dispensaries = pd.read_csv('./data/Dispensaries.csv', index_col=None)
@@ -17,6 +17,11 @@ density = pd.read_csv('./data/Dispensary_Density.csv', index_col=None)
 tweet_sentiment = pd.read_csv('./data/Tweet_Sentiment.csv', index_col=None)
 ca_geojson_path = './data/California_County_Boundaries.geojson'
 ca_counties = load_geojson(ca_geojson_path)
+
+st.markdown('<p class="big-font">Geographical Analysis</p>', unsafe_allow_html=False)
+st.markdown("Offer insights into the relationship between the presence of cannabis dispensaries and public sentiment towards cannabis in California counties. Reveal patterns such as whether areas with more dispensaries correlate with more positive public sentiment, thus providing valuable context for understanding how the accessibility of cannabis impacts community attitudes. ")
+
+
 with col1:
     density['County'] = density['County'].str.replace(' county', '', case=False, regex=False)
     choropleth = px.choropleth(

@@ -9,7 +9,7 @@ from generate_sidebar import generate_sidebar
 
 generate_sidebar()
 
-col1, col2 = st.columns(2)
+col1, col2 = st.columns([3,3])
 
 # Load the new data files
 dispensaries = pd.read_csv('./data/Dispensaries.csv', index_col=None)

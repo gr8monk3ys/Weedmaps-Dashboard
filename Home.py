@@ -35,7 +35,7 @@ generate_sidebar()
 with open('./markdown/home.md', 'r') as file:
     md_contents = file.read()        
 
-st.markdown(md_contents, unsafe_allow_html=True)
+st.markdown(md_contents, unsafe_allow_html=False)
 
 # Group data by Year and Month, and calculate the average VADER Sentiment Score
 # heatmap_data = tweet_sentiment.groupby(['Year', 'Month'])['VADER_Sentiment'].mean().reset_index()
