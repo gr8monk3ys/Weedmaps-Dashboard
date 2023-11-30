@@ -105,6 +105,7 @@ col1, col2, col3 = st.columns(3)
 
 with col1:
     st.markdown('<p class="big-font">Sentiment Analysis</p>', unsafe_allow_html=True)
+    st.markdown("These charts collectively illustrate the public sentiment on cannabis, trends in social media engagement, and the growth of the cannabis industry in California over recent years")
     sentiment_distribution = tweet_sentiment['BERT_Sentiment'].value_counts().reset_index()
     sentiment_distribution.columns = ['Sentiment', 'Count']
     fig_sentiment_distribution = px.bar(sentiment_distribution, x='Sentiment', y='Count', title='Sentiment Analysis Distribution', color_discrete_sequence=green_shades)
