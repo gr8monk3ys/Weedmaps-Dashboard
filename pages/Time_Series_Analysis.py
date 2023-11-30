@@ -34,5 +34,5 @@ with col3:
 with open('./markdown/time_series.md', 'r') as file:
     md_contents = file.read()
 
-st.markdown('Geographical Analysis', unsafe_allow_html=True)
+st.markdown('Time Series Analysis', unsafe_allow_html=True)
 st.markdown(md_contents, unsafe_allow_html=False)
