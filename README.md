@@ -24,7 +24,7 @@ Plotly: A graphing library that makes interactive, publication-quality graphs on
 
 Run the application using Streamlit:
 ```bash
-streamlit run app.py
+streamlit run Home.py
 ```
 
 Once the app is running, you can upload the tweets-sample.csv file or any other Twitter dataset in a similar format to analyze and visualize different aspects of the data

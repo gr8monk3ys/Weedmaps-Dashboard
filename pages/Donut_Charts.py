@@ -19,7 +19,9 @@ ca_geojson_path = './data/California_County_Boundaries.geojson'
 ca_counties = load_geojson(ca_geojson_path)
 
 
-col1, col2 = st.columns([3,3])
+#col1, col2 = st.columns([3,3])
+col1, space, col2 = st.columns([0.5,6,0.5])  # Adding an empty column for spacing
+
 with col1:
     county_dispensary_counts = density.groupby('County')['Dispensary_Count'].sum().reset_index()
     donut = px.pie(county_dispensary_counts, names='County', values='Dispensary_Count', hole=0.4)
@@ -27,11 +29,11 @@ with col1:
     donut.update_layout(title_text='Dispensary Distribution by County')
     st.plotly_chart(donut)
 with col2:
-    license_type_distribution = dispensaries['License Type'].value_counts().reset_index()
-    license_type_distribution.columns = ['License Type', 'Count']
-    fig_license_type = px.pie(license_type_distribution, names='License Type', values='Count', hole=0.4, color_discrete_sequence=green_shades)
+    license_type_distribution = dispensaries['License Designation'].value_counts().reset_index()
+    license_type_distribution.columns = ['License Designation', 'Count']
+    fig_license_type = px.pie(license_type_distribution, names='License Designation', values='Count', hole=0.4, color_discrete_sequence=green_shades)
     fig_license_type.update_traces(textinfo='percent+label')
-    fig_license_type.update_layout(title_text='License Type Distribution in Dispensaries')
+    fig_license_type.update_layout(title_text='License Designation Distribution')
     st.plotly_chart(fig_license_type)
 
 with open('./markdown/donut.md', 'r') as file:
