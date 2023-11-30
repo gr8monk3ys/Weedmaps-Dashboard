@@ -138,24 +138,24 @@ with col1:
     donut.update_layout(title_text='Dispensary Distribution by County')
     st.plotly_chart(donut)
 with col2:
-    license_type_distribution = dispensaries['License Type'].value_counts().reset_index()
-    license_type_distribution.columns = ['License Type', 'Count']
-    fig_license_type = px.pie(license_type_distribution, names='License Type', values='Count', hole=0.4, color_discrete_sequence=green_shades)
+    license_type_distribution = dispensaries['License Designation'].value_counts().reset_index()
+    license_type_distribution.columns = ['License Designation', 'Count']
+    fig_license_type = px.pie(license_type_distribution, names='License Designation', values='Count', hole=0.4, color_discrete_sequence=green_shades)
     fig_license_type.update_traces(textinfo='percent+label')
-    fig_license_type.update_layout(title_text='License Type Distribution in Dispensaries')
+    fig_license_type.update_layout(title_text='License Designation Distribution')
     st.plotly_chart(fig_license_type)
 
 # Group data by Year and Month, and calculate the average VADER Sentiment Score
-heatmap_data = tweet_sentiment.groupby(['Year', 'Month'])['VADER_Sentiment'].mean().reset_index()
-heatmap_pivot = heatmap_data.pivot(index="Month", columns="Year", values="VADER_Sentiment")
-
-with col1:
-    st.markdown("This is an explanation on the heatmap that is displayed to the right")
-
-with col2:
-    fig_heatmap = px.imshow(heatmap_pivot, labels=dict(x="Year", y="Month", color="Avg VADER Sentiment Score", color_continuous_scale='Viridis'),
-                            x=heatmap_pivot.columns, y=heatmap_pivot.index, aspect="auto", title="Heatmap of VADER Sentiment Scores Over Time")
-    st.plotly_chart(fig_heatmap)
+# heatmap_data = tweet_sentiment.groupby(['Year', 'Month'])['VADER_Sentiment'].mean().reset_index()
+# heatmap_pivot = heatmap_data.pivot(index="Month", columns="Year", values="VADER_Sentiment")
+#
+# with col1:
+#     st.markdown("This is an explanation on the heatmap that is displayed to the right")
+#
+# with col2:
+#     fig_heatmap = px.imshow(heatmap_pivot, labels=dict(x="Year", y="Month", color="Avg VADER Sentiment Score", color_continuous_scale='Viridis'),
+#                             x=heatmap_pivot.columns, y=heatmap_pivot.index, aspect="auto", title="Heatmap of VADER Sentiment Scores Over Time")
+#     st.plotly_chart(fig_heatmap)
 
 with col1:
     st.markdown("This is an explanation on the scatter plot that is displayed to the right")
