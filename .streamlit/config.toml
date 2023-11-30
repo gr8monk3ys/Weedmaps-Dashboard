@@ -11,8 +11,5 @@ secondaryBackgroundColor = "#EDF8F7"
 # Color used for text
 textColor = "darkgreen"
 
-# Color used for text on top of primaryColor
-secondaryTextColor = "limegreen"
-
 # Font style. Options are "sans serif", "serif", and "monospace"
 font = "sans serif"
