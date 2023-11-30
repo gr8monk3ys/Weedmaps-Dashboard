@@ -1,0 +1,3 @@
+The scatter plot provides a visual correlation between the presence of dispensaries and public sentiment. For instance, a clustering of points in the upper right corner would suggest that counties with more dispensaries tend to have more positive sentiment.
+By using color and symbols for different years, the plot can also indicate temporal changes, such as whether increasing numbers of dispensaries correlate with increasingly positive or negative sentiment over time.
+This visualization is valuable for stakeholders in the cannabis industry, policymakers, and social researchers, offering insights into how the accessibility of cannabis impacts community attitudes and how these attitudes evolve.

@@ -21,7 +21,11 @@ ca_counties = load_geojson(ca_geojson_path)
 
 # Explanation about the scatter plot in the left column
 with col1:
-    st.markdown("This is an explanation on the scatter plot that is displayed to the right.")
+    with open('./markdown/scatter.md', 'r') as file:
+        md_contents = file.read()   
+
+    st.markdown('Scatter Chart', unsafe_allow_html=True)
+    st.markdown(md_contents, unsafe_allow_html=False)
 
 # Creating a scatter plot in the right column
 with col2:
