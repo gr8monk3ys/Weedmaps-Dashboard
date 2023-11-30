@@ -1,6 +1,8 @@
+import streamlit as st
 import pandas as pd
 import plotly.express as px
 
+@st.cache_data()
 def compare_medical_recreational(dispensaries):
     # Filter and aggregate data
     grouped = dispensaries.groupby(['Year', 'Medical', 'Rec License']).size().unstack().fillna(0)
