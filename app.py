@@ -57,7 +57,7 @@ with open('style.css') as f:
 openai_api_key = os.getenv('OPENAI_API_KEY', '')
 generate_sidebar()
 
-st.write("Geographical Analysis")
+st.markdown('<p class="big-font">Geographical Analysis</p>', unsafe_allow_html=True)
 col1, col2 = st.columns(2)
 with col1:
     density['County'] = density['County'].str.replace(' county', '', case=False, regex=False)
@@ -103,7 +103,7 @@ with col2:
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    st.write("Sentiment Analysis")
+    st.markdown('<p class="big-font">Sentiment Analysis</p>', unsafe_allow_html=True)
     sentiment_distribution = tweet_sentiment['BERT_Sentiment'].value_counts().reset_index()
     sentiment_distribution.columns = ['Sentiment', 'Count']
     fig_sentiment_distribution = px.bar(sentiment_distribution, x='Sentiment', y='Count', title='Sentiment Analysis Distribution', color_discrete_sequence=green_shades)
@@ -120,7 +120,7 @@ with col3:
     st.plotly_chart(fig_yearly_license_issuance)
 
 with col1:
-    st.write("Time Series Analysis")
+    st.markdown('<p class="big-font">Time Series Analysis</p>', unsafe_allow_html=True)
     fig_sentiment_distribution = create_time_series(tweet_sentiment, 'Year', 'Month', 'Predictions', 'BERT Sentiment over time')
     st.plotly_chart(fig_sentiment_distribution)
 
