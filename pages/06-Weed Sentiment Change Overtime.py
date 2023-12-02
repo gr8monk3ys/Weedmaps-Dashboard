@@ -9,6 +9,9 @@ from generate_sidebar import generate_sidebar
 
 generate_sidebar()
 
+# Page title
+st.title('Sentiment on Cannabis Use According to Different ML Models')
+
 sys.path.append('./plots/')
 from time_series import create_time_series
 
@@ -34,5 +37,13 @@ with col3:
 with open('./markdown/time_series.md', 'r') as file:
     md_contents = file.read()
 
-st.markdown('Time Series Analysis', unsafe_allow_html=True)
-st.markdown(md_contents, unsafe_allow_html=False)
+kpi1_value = 'BERT: Strong "YESSSS" and "NOOOO"'
+kpi2_value = 'VADER: "MEH"'
+kpi3_value = 'GPT-4: "yes" and "no"'
+kpi4_value = 'MOST Positive in CA: July 2020'
+kpi5_value = 'MOST Negative in CA: April 2022'
+st.metric(label="The most sensitive model: ", value=kpi1_value)
+st.metric(label="The most nonchalant model: ", value=kpi2_value)
+st.metric(label="The tempered model: ", value=kpi3_value)
+st.metric(label="The time when the sentiment on weed is ", value=kpi4_value)
+st.metric(label="The time when the sentiment on weed is ", value=kpi5_value)

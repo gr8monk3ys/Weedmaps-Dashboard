@@ -6,10 +6,14 @@ import streamlit as st
 import plotly.express as px
 from load_geojson import load_geojson
 from generate_sidebar import generate_sidebar
+# Page title
+st.title('Retailer Distribution in California')
 
 generate_sidebar()
 
 green_shades = ["lightgreen", "mediumseagreen", "darkgreen", "limegreen", "forestgreen"]
+
+
 
 # Load the new data files
 dispensaries = pd.read_csv('./data/Dispensaries.csv', index_col=None)
@@ -18,26 +22,32 @@ tweet_sentiment = pd.read_csv('./data/Tweet_Sentiment.csv', index_col=None)
 ca_geojson_path = './data/California_County_Boundaries.geojson'
 ca_counties = load_geojson(ca_geojson_path)
 
+#st.markdown(scrollable_container_css, unsafe_allow_html=True)
+# Inject custom CSS with st.markdown
 
-col1, col2 = st.columns([3,3])
+#col1 = st.columns(1)
 # col1, space, col2 = st.columns([1,1])  # Adding an empty column for spacing
 
-with col1:
+with st.container():
+
     county_dispensary_counts = density.groupby('County')['Dispensary_Count'].sum().reset_index()
     donut = px.pie(county_dispensary_counts, names='County', values='Dispensary_Count', hole=0.4)
     donut.update_traces(textinfo='percent+label')
-    donut.update_layout(title_text='Dispensary Distribution by County')
+    donut.update_layout(title_text='(Hover to expand)', width=800, height=600, )
     st.plotly_chart(donut)
-with col2:
-    license_type_distribution = dispensaries['License Designation'].value_counts().reset_index()
-    license_type_distribution.columns = ['License Designation', 'Count']
-    fig_license_type = px.pie(license_type_distribution, names='License Designation', values='Count', hole=0.4, color_discrete_sequence=green_shades)
-    fig_license_type.update_traces(textinfo='percent+label')
-    fig_license_type.update_layout(title_text='License Designation Distribution')
-    st.plotly_chart(fig_license_type)
 
-with open('./markdown/donut.md', 'r') as file:
-    md_contents = file.read()   
+     #st.markdown(scrollable_container_css, unsafe_allow_html=True)
 
-st.markdown('Donut Charts', unsafe_allow_html=True)
-st.markdown(md_contents, unsafe_allow_html=False)
+
+
+
+
+
+# For KPI display, you could use st.metric
+kpi1_value = "Los Angeles"
+kpi2_value = " 60% of California Stores are in 6 counties"
+
+
+st.metric(label="The County that has the most cannabis retail stores in California: ", value=kpi1_value)
+st.metric(label="Strong Business Concentration: ", value=kpi2_value)
+

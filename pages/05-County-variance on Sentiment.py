@@ -7,9 +7,10 @@ import plotly.express as px
 from load_geojson import load_geojson
 from generate_sidebar import generate_sidebar
 
+st.title('County-Level Sentiment Scores on Weed')
+
 generate_sidebar()
 
-col1, col2 = st.columns([5,5])
 
 # Load the new data files
 dispensaries = pd.read_csv('./data/Dispensaries.csv', index_col=None)
@@ -18,22 +19,22 @@ tweet_sentiment = pd.read_csv('./data/Tweet_Sentiment.csv', index_col=None)
 ca_geojson_path = './data/California_County_Boundaries.geojson'
 ca_counties = load_geojson(ca_geojson_path)
 
-with col1:
-    density['County'] = density['County'].str.replace(' county', '', case=False, regex=False)
-    choropleth = px.choropleth(
-        density,
-        geojson=ca_counties,
-        locations='County',  
-        featureidkey='properties.NAME',  # Updated to new key
-        color='Dispensary_PerCapita',  
-        color_continuous_scale='Viridis',
-        scope="usa"
-    )
-    choropleth.update_geos(fitbounds="locations", visible=False)
-    choropleth.update_layout(title_text='Dispensary Per Capita in California Counties')
-    st.plotly_chart(choropleth, use_container_width=False, config={'staticPlot': False})
+# with col1:
+#     density['County'] = density['County'].str.replace(' county', '', case=False, regex=False)
+#     choropleth = px.choropleth(
+#         density,
+#         geojson=ca_counties,
+#         locations='County',
+#         featureidkey='properties.NAME',  # Updated to new key
+#         color='Dispensary_PerCapita',
+#         color_continuous_scale='Viridis',
+#         scope="usa"
+#     )
+#     choropleth.update_geos(fitbounds="locations", visible=False)
+#     choropleth.update_layout(title_text='Dispensary Per Capita in California Counties')
+#     st.plotly_chart(choropleth, use_container_width=False, config={'staticPlot': False})
 
-with col2:
+with st.container():
     @st.cache_data()
     def map_stars_to_numeric(star_rating):
         if pd.isna(star_rating):
@@ -56,11 +57,14 @@ with col2:
         scope="usa"
     )
     sentiment_choropleth.update_geos(fitbounds="locations", visible=False)
-    sentiment_choropleth.update_layout(title_text='Sentiment Per Capita in California Counties')
+    sentiment_choropleth.update_layout(title_text='How are opinions on weed vary across counties in California? (Expand & Hover)')
     st.plotly_chart(sentiment_choropleth, use_container_width=False, config={'staticPlot': False})
 
-with open('./markdown/choropleth.md', 'r') as file:
-    md_contents = file.read()
 
-st.markdown('Geographical Analysis', unsafe_allow_html=True)
-st.markdown(md_contents, unsafe_allow_html=False)
+# For KPI display, you could use st.metric
+kpi1_value = "San Benito and Orange"
+kpi2_value = "Amador and San Bernardino"
+
+st.metric(label="**Top 2** Counties with the **Most Positive Attitude** on cannabis (2020-2022)", value=kpi1_value)
+st.metric(label="**Top 2** Counties with the **Most Positive Attitude** on cannabis (2020-2022)", value=kpi2_value)
+
