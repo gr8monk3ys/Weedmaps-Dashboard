@@ -1,0 +1,314 @@
+/* Main theme colors */
+:root {
+    --primary-color: #4CAF50;
+    --primary-light: #81C784;
+    --primary-dark: #388E3C;
+    --background-color: #FFFFFF;
+    --text-color: #333333;
+    --secondary-text: #666666;
+}
+
+/* Global styles */
+.stApp {
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+/* Header styling */
+.stApp header {
+    background-color: transparent !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text-color) !important;
+    font-weight: 600 !important;
+}
+
+.main-header {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--primary-color) !important;
+    margin-bottom: 1rem;
+}
+
+.sub-header {
+    font-size: 1.5rem;
+    color: var(--primary-dark) !important;
+    margin-bottom: 2rem;
+}
+
+/* Metric cards */
+div[data-testid="stMetricValue"] {
+    background-color: rgba(76, 175, 80, 0.1);
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid rgba(76, 175, 80, 0.2);
+    color: var(--text-color);
+}
+
+/* Metric value styling */
+div[data-testid="stMetricValue"] > div {
+    font-size: 2rem !important;
+    color: var(--primary-color) !important;
+}
+
+/* Metric delta styling */
+div[data-testid="stMetricDelta"] > div {
+    color: var(--primary-light) !important;
+}
+
+/* DataFrames styling */
+.dataframe {
+    background-color: var(--background-color) !important;
+    border-radius: 10px !important;
+    border: 1px solid var(--primary-color) !important;
+}
+
+.dataframe th {
+    background-color: var(--primary-light) !important;
+    color: white !important;
+    padding: 8px !important;
+}
+
+.dataframe td {
+    padding: 8px !important;
+    border-color: var(--primary-color) !important;
+}
+
+/* Charts and plots */
+[data-testid="stPlotlyChart"] > div {
+    background-color: var(--background-color) !important;
+    border-radius: 10px !important;
+    border: 1px solid var(--primary-color) !important;
+    padding: 1rem !important;
+}
+
+/* Tabs styling */
+.stTabs [data-baseweb="tab-list"] {
+    gap: 1rem;
+    background-color: var(--background-color) !important;
+    border-bottom: 2px solid var(--primary-light) !important;
+}
+
+.stTabs [data-baseweb="tab"] {
+    padding: 1rem !important;
+    background-color: var(--background-color) !important;
+    border-radius: 10px !important;
+    border: 1px solid var(--primary-color) !important;
+}
+
+.stTabs [data-baseweb="tab"][aria-selected="true"] {
+    background-color: var(--primary-color) !important;
+    color: white !important;
+    border-bottom: 2px solid var(--primary-color) !important;
+}
+
+/* Expander styling */
+.streamlit-expanderHeader {
+    background-color: var(--background-color) !important;
+    border-radius: 10px !important;
+    border: 1px solid var(--primary-color) !important;
+}
+
+/* Custom card class */
+.custom-card {
+    background-color: var(--background-color);
+    padding: 1.5rem;
+    border-radius: 10px;
+    border: 1px solid var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+/* Sidebar styling */
+.css-1d391kg {
+    background-color: var(--background-color) !important;
+}
+
+/* Buttons */
+.stButton > button {
+    background-color: var(--primary-color) !important;
+    color: white !important;
+    border: none !important;
+    padding: 0.5rem 1rem !important;
+    border-radius: 4px !important;
+    transition: background-color 0.3s !important;
+}
+
+.stButton > button:hover {
+    background-color: var(--primary-dark) !important;
+}
+
+/* Info boxes */
+.stAlert {
+    background-color: rgba(76, 175, 80, 0.1) !important;
+    border-left-color: var(--primary-color) !important;
+}
+
+/* Custom grid layout */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+    padding: 1rem 0;
+}
+
+/* Custom metric card */
+.metric-card {
+    background-color: rgba(76, 175, 80, 0.1);
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid rgba(76, 175, 80, 0.2);
+    color: var(--text-color);
+}
+
+.metric-value {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin: 0.5rem 0;
+}
+
+.metric-label {
+    color: var(--text-color);
+    font-size: 1rem;
+    opacity: 0.8;
+}
+
+/* Responsive design */
+@media screen and (max-width: 768px) {
+    .grid-container {
+        grid-template-columns: 1fr;
+    }
+    
+    div[data-testid="stMetricValue"] > div {
+        font-size: 1.5rem !important;
+    }
+}
+
+/* Main content */
+.main {
+    background-color: var(--background-color);
+    padding: 2rem;
+}
+
+/* Cards */
+.stCard {
+    background-color: var(--background-color);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    transition: transform 0.2s ease-in-out;
+}
+
+.stCard:hover {
+    transform: translateY(-2px);
+}
+
+/* Metrics */
+.stMetric {
+    background-color: var(--background-color);
+    border-radius: 8px;
+    padding: 1rem;
+    border-left: 4px solid var(--primary-color);
+}
+
+/* Plots */
+.js-plotly-plot {
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    background-color: var(--background-color);
+    padding: 1rem;
+}
+
+/* Text elements */
+p {
+    color: var(--text-color);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+/* Input widgets */
+.stSelectbox, .stTextInput {
+    background-color: var(--background-color);
+    border-radius: 6px;
+    border: 1px solid var(--primary-color);
+}
+
+/* Success, warning, and error text */
+.success-text {
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+.warning-text {
+    color: var(--primary-light);
+    font-weight: 500;
+}
+
+.error-text {
+    color: #f44336;
+    font-weight: 500;
+}
+
+/* Custom font size */
+.big-font {
+    font-size: 24px; /* Or any other size you prefer */
+}
+
+/* Streamlit elements override */
+.stSlider > div > div > div {
+    background-color: var(--primary-light) !important;
+}
+
+.stSlider > div > div > div > div {
+    background-color: var(--primary-color) !important;
+}
+
+.stCheckbox > label > div[role="checkbox"] {
+    background-color: var(--primary-light) !important;
+    border-color: var(--primary-color) !important;
+}
+
+.stSelectbox > div > div {
+    background-color: var(--background-color) !important;
+    border-color: var(--primary-color) !important;
+}
+
+.stMultiSelect > div > div {
+    background-color: var(--background-color) !important;
+    border-color: var(--primary-color) !important;
+}
+
+/* Radio buttons */
+.stRadio > div {
+    background-color: var(--background-color) !important;
+}
+
+.stRadio > div > label > div[role="radio"] {
+    background-color: var(--primary-light) !important;
+    border-color: var(--primary-color) !important;
+}
+
+/* Progress bar */
+.stProgress > div > div > div {
+    background-color: var(--primary-color) !important;
+}
+
+/* Number input */
+.stNumberInput > div > div > input {
+    border-color: var(--primary-color) !important;
+}
+
+/* Text input */
+.stTextInput > div > div > input {
+    border-color: var(--primary-color) !important;
+}
+
+/* Select slider */
+.stSelectSlider > div > div > div {
+    background-color: var(--primary-light) !important;
+}
+
+.stSelectSlider > div > div > div > div {
+    background-color: var(--primary-color) !important;
+}
