@@ -1,6 +1,6 @@
 # California Cannabis Market Analytics Dashboard
 
-![Dashboard Preview](public/image/dashboard.png)
+![Dashboard Preview](public/images/dashboard.png)
 
 ## Overview
 
