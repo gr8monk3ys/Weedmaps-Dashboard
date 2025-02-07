@@ -1,39 +1,119 @@
-# DSCI-554-Test
+# California Cannabis Market Analytics Dashboard
 
-## Description
+![Dashboard Preview](public/image/dashboard.png)
 
-This project is a Python-based application designed for analyzing and visualizing Twitter data. Utilizing technologies like Streamlit, OpenAI, LangChain, Pandas, and Plotly, it offers an interactive way to explore trends, sentiments, and patterns in Twitter datasets.
+## Overview
 
-## Installation
-
-To run this project, you'll need Python installed on your machine. After cloning or downloading the project, install the required dependencies:
-
-```bash
-pip install -r requirements.txt
-```
-
-This will install the following packages:
-
-Streamlit: An open-source app framework for Machine Learning and Data Science teams.
-OpenAI: A library to interact with OpenAI's APIs.
-LangChain: A tool for building language model applications.
-Pandas: A fast, powerful, flexible, and easy-to-use open-source data analysis and manipulation tool.
-Plotly: A graphing library that makes interactive, publication-quality graphs online.
-
-## Usage 
-
-Run the application using Streamlit:
-```bash
-streamlit run Home.py
-```
-
-Once the app is running, you can upload the tweets-sample.csv file or any other Twitter dataset in a similar format to analyze and visualize different aspects of the data
+This Streamlit-based dashboard provides comprehensive analytics and insights into California's cannabis retail market. The application combines dispensary data with social media sentiment analysis to offer a multi-faceted view of the market landscape.
 
 ## Features
 
-Data Loading: Load and view Twitter datasets.
-Data Analysis: Perform various analyses on Twitter data, like sentiment analysis, trend identification, etc.
-Data Visualization: Utilize Plotly to create interactive charts and graphs.
-Interactive UI: Easy-to-use interface built with Streamlit.
-Contributing
-Contributions to this project are welcome. Please fork the repository and submit a pull request for review.
+### 🏠 Home Dashboard
+- Key market metrics and trends
+- Overall market health indicators
+- Quick navigation to detailed analysis sections
+
+### 📊 Market Overview
+- Year-over-year market growth analysis
+- Regional distribution of dispensaries
+- License type breakdown by county
+- Interactive filters for custom analysis
+
+### 🗺️ Geographic Analysis
+- Interactive choropleth map of California counties
+- Population-adjusted retailer density metrics
+- Regional market concentration analysis
+- County-level license distribution
+
+### 💭 Social Insights
+- Social media sentiment analysis by region
+- Temporal sentiment trends
+- Correlation between market density and public sentiment
+- County-level sentiment distribution
+
+## Data Sources
+
+The dashboard utilizes three main data sources:
+- `Dispensaries.csv`: Contains detailed information about cannabis retailers
+- `Tweet_Sentiment.csv`: Social media sentiment data related to cannabis
+- `California_County_Boundaries.geojson`: Geographic boundaries for visualization
+
+## Technology Stack
+
+- **Python**: >= 3.10
+- **Key Dependencies**:
+  - Streamlit: Web application framework
+  - Pandas: Data manipulation and analysis
+  - Plotly: Interactive visualizations
+  - Transformers: Sentiment analysis models
+
+## Setup and Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/your-username/california-cannabis-analytics.git
+cd california-cannabis-analytics
+```
+
+2. Create and activate a virtual environment:
+```bash
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+```
+
+3. Install dependencies using Poetry:
+```bash
+poetry install
+```
+
+4. Set up environment variables:
+```bash
+cp .env.example .env
+# Edit .env with your configuration
+```
+
+5. Run the application:
+```bash
+streamlit run app/Home.py
+```
+
+## Project Structure
+
+```
+├── app/
+│   ├── Home.py              # Main dashboard entry point
+│   ├── pages/               # Dashboard pages
+│   ├── plots/               # Visualization components
+│   ├── utils/               # Utility functions
+│   └── style.css           # Custom styling
+├── data/                    # Data files
+├── config/                  # Configuration files
+└── public/                  # Static assets
+```
+
+## Development
+
+The project uses Poetry for dependency management and includes development tools:
+- Black: Code formatting
+- isort: Import sorting
+- flake8: Code linting
+- pytest: Testing
+
+Run tests:
+```bash
+poetry run pytest
+```
+
+Format code:
+```bash
+poetry run black .
+poetry run isort .
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
